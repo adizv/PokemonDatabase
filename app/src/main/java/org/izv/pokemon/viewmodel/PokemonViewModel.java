@@ -1,0 +1,42 @@
+package org.izv.pokemon.viewmodel;
+
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+
+import org.izv.pokemon.model.entity.Pokemon;
+import org.izv.pokemon.model.repository.PokemonRepository;
+
+import java.util.List;
+
+public class PokemonViewModel extends AndroidViewModel {
+
+    private PokemonRepository repository;
+
+    public PokemonViewModel(@NonNull Application application) {
+        super(application);
+        repository = new PokemonRepository(application);
+    }
+
+    public void insertPokemon(Pokemon... pokemons) {
+        repository.insertPokemon(pokemons);
+    }
+
+    public void updatePokemon(Pokemon... pokemons) {
+        repository.updatePokemon(pokemons);
+    }
+
+    public void deletePokemons(Pokemon... pokemons) {
+        repository.deletePokemons(pokemons);
+    }
+
+    public LiveData<List<Pokemon>> getPokemons() {
+        return repository.getPokemons();
+    }
+
+    public LiveData<Pokemon> getPokemon(long id) {
+        return repository.getPokemon(id);
+    }
+}
