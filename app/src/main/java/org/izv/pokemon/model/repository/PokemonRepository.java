@@ -1,6 +1,7 @@
 package org.izv.pokemon.model.repository;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -22,6 +23,19 @@ public class PokemonRepository {
     public PokemonRepository(Context context) {
         PokemonDatabase db = PokemonDatabase.getDatabase(context);
         dao = db.getDao();
+    }
+
+    public void insertPokemon(Pokemon pokemon, Type type) {
+        Runnable r = () -> {
+            long[] ids = dao.insertType(type);
+            if(ids[0] < 1) {
+                pokemon.idtype = dao.getIdType(type.name);
+            } else {
+                pokemon.idtype = ids[0];
+            }
+            dao.insertPokemon(pokemon);
+        };
+        new Thread(r).start();
     }
 
     public void insertPokemon(Pokemon... pokemons) {

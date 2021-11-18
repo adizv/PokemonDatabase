@@ -20,7 +20,13 @@ public interface PokemonDao {
     void insertPokemon(Pokemon... pokemons);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertType(Type... types);
+    long[] insertType(Type... types);
+
+    /*@Insert(onConflict = OnConflictStrategy.IGNORE)
+    long insert(Type type);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    long[] insertTypes(Type... types);*/
 
     @Update
     public void updatePokemon(Pokemon... pokemons);
@@ -45,4 +51,10 @@ public interface PokemonDao {
 
     @Query("select * from pokemontype where id = :id")
     LiveData<Type> getType(long id);
+
+    @Query("select id from pokemontype where name = :name")
+    long getIdType(String name);
+
+    @Query("select * from pokemontype where name = :name")
+    Type getType(String name);
 }

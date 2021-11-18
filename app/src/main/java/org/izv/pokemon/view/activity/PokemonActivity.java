@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 
 import org.izv.pokemon.R;
+import org.izv.pokemon.model.entity.Pokemon;
 import org.izv.pokemon.model.entity.Type;
 import org.izv.pokemon.view.adapter.viewholder.PokemonViewHolder;
 import org.izv.pokemon.viewmodel.PokemonViewModel;
@@ -23,11 +24,13 @@ public class PokemonActivity extends AppCompatActivity {
     private void initialize() {
         PokemonViewModel pvm = new ViewModelProvider(this).get(PokemonViewModel.class);
         TypeViewModel tvm = new ViewModelProvider(this).get(TypeViewModel.class);
-
         Type type = new Type();
-        type.name = "Fuego";
-
-        tvm.insertType(type);
-
+        type.name = "Aguas";
+        Pokemon pokemon = new Pokemon();
+        pokemon.height = 2.2;
+        pokemon.weight = 2;
+        pokemon.name = "Squirtle";
+        pokemon.url = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/007.png";
+        pvm.insertPokemon(pokemon, type); //hebra
     }
 }

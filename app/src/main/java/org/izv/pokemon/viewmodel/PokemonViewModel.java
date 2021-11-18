@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import org.izv.pokemon.model.entity.Pokemon;
+import org.izv.pokemon.model.entity.Type;
 import org.izv.pokemon.model.repository.PokemonRepository;
 
 import java.util.List;
@@ -38,5 +39,9 @@ public class PokemonViewModel extends AndroidViewModel {
 
     public LiveData<Pokemon> getPokemon(long id) {
         return repository.getPokemon(id);
+    }
+
+    public void insertPokemon(Pokemon pokemon, Type type) {
+        repository.insertPokemon(pokemon, type);
     }
 }
