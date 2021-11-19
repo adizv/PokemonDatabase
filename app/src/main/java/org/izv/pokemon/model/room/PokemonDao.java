@@ -9,6 +9,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import org.izv.pokemon.model.entity.Pokemon;
+import org.izv.pokemon.model.entity.PokemonType;
 import org.izv.pokemon.model.entity.Type;
 
 import java.util.List;
@@ -17,31 +18,34 @@ import java.util.List;
 public interface PokemonDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertPokemon(Pokemon... pokemons);
+    List<Long> insertPokemon(Pokemon... pokemons);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    long[] insertType(Type... types);
-
-    /*@Insert(onConflict = OnConflictStrategy.IGNORE)
-    long insert(Type type);
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    long[] insertTypes(Type... types);*/
+    List<Long> insertType(Type... types);
 
     @Update
-    public void updatePokemon(Pokemon... pokemons);
+    int updatePokemon(Pokemon... pokemons);
 
     @Update
-    public void updateType(Type... types);
+    int updateType(Type... types);
 
     @Delete
-    public void deletePokemons(Pokemon... pokemons);
+    int deletePokemons(Pokemon... pokemons);
 
     @Delete
-    public void deleteType(Type... types);
+    int deleteType(Type... types);
+
+    @Query("delete from pokemontype")
+    int deleteAllTypes();
+
+    @Query("delete from pokemon")
+    int deleteAllPokemon();
 
     @Query("select * from pokemon order by name asc")
     LiveData<List<Pokemon>> getPokemons();
+
+    @Query("select p.*, pt.id type_id, pt.name type_name from pokemon p join pokemontype pt on p.idtype = pt.id order by name asc")
+    LiveData<List<PokemonType>> getAllPokemon();
 
     @Query("select * from pokemontype order by name asc")
     LiveData<List<Type>> getTypes();

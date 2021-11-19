@@ -27,15 +27,21 @@ public class PokemonRepository {
 
     public void insertPokemon(Pokemon pokemon, Type type) {
         Runnable r = () -> {
-            long[] ids = dao.insertType(type);
-            if(ids[0] < 1) {
-                pokemon.idtype = dao.getIdType(type.name);
-            } else {
-                pokemon.idtype = ids[0];
+            pokemon.idtype = insertTypeGetId(type);
+            if(pokemon.idtype > 0) {
+                dao.insertPokemon(pokemon);
             }
-            dao.insertPokemon(pokemon);
         };
         new Thread(r).start();
+    }
+
+    private long insertTypeGetId(Type type) {
+        List<Long> ids = dao.insertType(type);
+        if(ids.get(0) < 1) {
+            return dao.getIdType(type.name);
+        } else {
+            return ids.get(0);
+        }
     }
 
     public void insertPokemon(Pokemon... pokemons) {
