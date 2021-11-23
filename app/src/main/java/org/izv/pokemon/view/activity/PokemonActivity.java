@@ -8,9 +8,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.izv.pokemon.R;
 import org.izv.pokemon.model.entity.Pokemon;
+import org.izv.pokemon.model.entity.PokemonType;
 import org.izv.pokemon.model.entity.Type;
 import org.izv.pokemon.view.adapter.PokemonAdapter;
 import org.izv.pokemon.view.adapter.viewholder.PokemonViewHolder;
@@ -35,14 +39,29 @@ public class PokemonActivity extends AppCompatActivity {
         rvPokemon.setLayoutManager(new LinearLayoutManager(this));
 
         PokemonViewModel pvm = new ViewModelProvider(this).get(PokemonViewModel.class);
-        PokemonAdapter pokemonAdapter = new PokemonAdapter(null);
+        PokemonAdapter pokemonAdapter = new PokemonAdapter(this);
 
         rvPokemon.setAdapter(pokemonAdapter);
 
-        LiveData<List<Pokemon>> listaPokemon = pvm.getPokemons();
-        listaPokemon.observe(this, pokemons -> {
+        //LiveData<List<Pokemon>> listaPokemon = pvm.getPokemons();
+        LiveData<List<PokemonType>> listaPokemonType = pvm.getAllPokemon();
+        listaPokemonType.observe(this, pokemons -> {
             pokemonAdapter.setPokemonList(pokemons);
         });
+
+        FloatingActionButton fab = findViewById(R.id.fabAddPokemon);
+        fab.setOnClickListener(v -> {
+            Pokemon pokemon = new Pokemon();
+            pokemon.height = 0.32;
+            pokemon.weight = 2;
+            pokemon.name = "Ditto";
+            pokemon.url = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/132.png";
+            pokemon.idtype = 1;
+            pvm.insertPokemon(pokemon);
+        });
+        /*listaPokemon.observe(this, pokemons -> {
+            pokemonAdapter.setPokemonList(pokemons);
+        });*/
         //RecyclerView rv = findViewById(R.id.tvUrl);
         /*
         TypeViewModel tvm = new ViewModelProvider(this).get(TypeViewModel.class);

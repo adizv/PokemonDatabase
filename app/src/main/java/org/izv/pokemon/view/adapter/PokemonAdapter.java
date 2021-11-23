@@ -1,5 +1,6 @@
 package org.izv.pokemon.view.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,18 +8,23 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import org.izv.pokemon.R;
 import org.izv.pokemon.model.entity.Pokemon;
+import org.izv.pokemon.model.entity.PokemonType;
+import org.izv.pokemon.model.entity.Type;
 import org.izv.pokemon.view.adapter.viewholder.PokemonViewHolder;
 
 import java.util.List;
 
 public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> {
 
-    private List<Pokemon> pokemonList;
+    private List<PokemonType> pokemonList;
+    private Context context;
 
-    public PokemonAdapter(List<Pokemon> pokemonList) {
-        this.pokemonList = pokemonList;
+    public PokemonAdapter(Context context) {
+        this.context = context;
     }
 
     @NonNull
@@ -30,12 +36,15 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull PokemonViewHolder holder, int position) {
-        Pokemon pokemon = pokemonList.get(position);
+        PokemonType pokemonType = pokemonList.get(position);
+        Pokemon pokemon = pokemonType.pokemon;
+        Type type = pokemonType.type;
         holder.tvUrl.setText(pokemon.url);
-        holder.tvWeight.setText(pokemon.weight + "");
-        holder.tvHeight.setText(pokemon.height + "");
-        holder.tvType.setText(pokemon.idtype + "");
+        holder.tvWeight.setText(pokemon.weight + " " + context.getString(R.string.weight_unit));
+        holder.tvHeight.setText(pokemon.height + " " + context.getString(R.string.height_unit));
+        holder.tvType.setText(type.name + " (" + type.id + ")");
         holder.tvName.setText(pokemon.name);
+        Picasso.get().load("https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg").into(holder.ivPokemon);
     }
 
     @Override
@@ -46,7 +55,10 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> {
         return pokemonList.size();
     }
 
-    public void setPokemonList(List<Pokemon> pokemonList) {
+    public void setPokemonList(List<PokemonType> pokemonList) {
+        /*if(this.pokemonList == null) {
+            this.pokemonList = pokemonList;
+        }*/
         this.pokemonList = pokemonList;
         notifyDataSetChanged();
     }

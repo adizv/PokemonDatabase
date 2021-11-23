@@ -5,8 +5,8 @@ import androidx.room.Embedded;
 public class PokemonType {
 
     @Embedded
-    private Pokemon pokemon;
+    public Pokemon pokemon;
 
     @Embedded(prefix="type_")
-    private Type type;
+    public Type type;
 }

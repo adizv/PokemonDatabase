@@ -4,8 +4,10 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Query;
 
 import org.izv.pokemon.model.entity.Pokemon;
+import org.izv.pokemon.model.entity.PokemonType;
 import org.izv.pokemon.model.entity.Type;
 import org.izv.pokemon.model.room.PokemonDao;
 import org.izv.pokemon.model.room.PokemonDatabase;
@@ -15,6 +17,7 @@ import java.util.List;
 public class PokemonRepository {
 
     private PokemonDao dao;
+    LiveData<List<PokemonType>> allPokemon;
     LiveData<List<Pokemon>> livePokemons;
     LiveData<List<Type>> liveTypes;
     LiveData<Pokemon> livePokemon;
@@ -112,5 +115,12 @@ public class PokemonRepository {
             liveType = dao.getType(id);
         }
         return liveType;
+    }
+
+    public LiveData<List<PokemonType>> getAllPokemon() {
+        if(allPokemon == null) {
+            allPokemon = dao.getAllPokemon();
+        }
+        return allPokemon;
     }
 }
