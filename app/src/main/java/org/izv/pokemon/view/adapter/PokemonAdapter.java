@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import org.izv.pokemon.R;
@@ -44,7 +45,8 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> {
         holder.tvHeight.setText(pokemon.height + " " + context.getString(R.string.height_unit));
         holder.tvType.setText(type.name + " (" + type.id + ")");
         holder.tvName.setText(pokemon.name);
-        Picasso.get().load("https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg").into(holder.ivPokemon);
+        //Picasso.get().load(pokemon.url).into(holder.ivPokemon);
+        Glide.with(context).load(pokemon.url).into(holder.ivPokemon);
     }
 
     @Override
