@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -51,22 +52,8 @@ public class PokemonActivity extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.fabAddPokemon);
         fab.setOnClickListener(v -> {
-            /*Pokemon pokemon = new Pokemon();
-            pokemon.height = 0.32;
-            pokemon.weight = 2;
-            pokemon.name = "Ditto";
-            pokemon.url = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/132.png";
-            pokemon.idtype = 1;
-            pvm.insertPokemon(pokemon);*/
-
-            Type type = new Type();
-            type.name = "Aguas";
-            Pokemon pokemon = new Pokemon();
-            pokemon.height = 2.2;
-            pokemon.weight = 2;
-            pokemon.name = "Squirtle";
-            pokemon.url = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/007.png";
-            pvm.insertPokemon(pokemon, type);
+            Intent intent = new Intent(this, CreatePokemonActivity.class);
+            startActivity(intent);
         });
         /*listaPokemon.observe(this, pokemons -> {
             pokemonAdapter.setPokemonList(pokemons);

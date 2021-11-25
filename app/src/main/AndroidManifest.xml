@@ -16,7 +16,9 @@
             android:exported="false" />
         <activity
             android:name=".view.activity.CreatePokemonActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".view.activity.PokemonActivity"
+            />
         <activity
             android:name=".view.activity.CreateTypeActivity"
             android:exported="false" />

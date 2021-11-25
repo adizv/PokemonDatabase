@@ -16,4 +16,9 @@ public class Type {
     @NonNull
     @ColumnInfo(name = "name")
     public String name;
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
