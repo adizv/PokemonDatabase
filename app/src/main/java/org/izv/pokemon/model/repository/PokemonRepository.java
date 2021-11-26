@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Query;
 
 import org.izv.pokemon.model.entity.Pokemon;
@@ -14,6 +15,7 @@ import org.izv.pokemon.model.entity.Type;
 import org.izv.pokemon.model.room.PokemonDao;
 import org.izv.pokemon.model.room.PokemonDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PokemonRepository {
@@ -26,12 +28,16 @@ public class PokemonRepository {
     LiveData<List<Type>> liveTypes;
     LiveData<Pokemon> livePokemon;
     LiveData<Type> liveType;
+    MutableLiveData<Long> liveInsertResult;
+    MutableLiveData<List<Long>> liveInsertResults;
     SharedPreferences preferences;
 
     public PokemonRepository(Context context) {
         PokemonDatabase db = PokemonDatabase.getDatabase(context);
         dao = db.getDao();
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        liveInsertResult = new MutableLiveData<>();
+        liveInsertResults = new MutableLiveData<>();
         if(!getInit()) {
             typesPreload();
             setInit();
@@ -48,6 +54,14 @@ public class PokemonRepository {
         new Thread(r).start();
     }
 
+    public MutableLiveData<Long> getInsertResult() {
+        return liveInsertResult;
+    }
+
+    public MutableLiveData<List<Long>> getInsertResults() {
+        return liveInsertResults;
+    }
+
     private long insertTypeGetId(Type type) {
         List<Long> ids = dao.insertType(type);
         if(ids.get(0) < 1) {
@@ -59,7 +73,9 @@ public class PokemonRepository {
 
     public void insertPokemon(Pokemon... pokemons) {
         Runnable r = () -> {
-            dao.insertPokemon(pokemons);
+            List<Long> resultList = dao.insertPokemon(pokemons);
+            liveInsertResult.postValue(resultList.get(0));
+            liveInsertResults.postValue(resultList);
         };
         new Thread(r).start();
     }

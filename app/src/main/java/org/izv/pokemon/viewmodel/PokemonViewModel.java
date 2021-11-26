@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import org.izv.pokemon.model.entity.Pokemon;
 import org.izv.pokemon.model.entity.PokemonType;
@@ -48,5 +49,13 @@ public class PokemonViewModel extends AndroidViewModel {
 
     public LiveData<List<PokemonType>> getAllPokemon() {
         return repository.getAllPokemon();
+    }
+
+    public MutableLiveData<Long> getInsertResult() {
+        return repository.getInsertResult();
+    }
+
+    public MutableLiveData<List<Long>> getInsertResults() {
+        return repository.getInsertResults();
     }
 }

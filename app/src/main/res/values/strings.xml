@@ -3,4 +3,5 @@
     <string name="add_string">add</string>
     <string name="weight_unit">kg</string>
     <string name="height_unit">dm</string>
+    <string name="default_type">«Seleccione tipo»</string>
 </resources>
