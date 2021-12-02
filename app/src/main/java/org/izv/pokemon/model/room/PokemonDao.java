@@ -22,6 +22,9 @@ public interface PokemonDao {
     List<Long> insertPokemon(Pokemon... pokemons);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
+    Long insert(Pokemon pokemon);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     List<Long> insertType(Type... types);
 
     @Update

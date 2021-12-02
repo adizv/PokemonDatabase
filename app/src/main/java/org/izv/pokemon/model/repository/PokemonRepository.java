@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Query;
 
+import org.izv.pokemon.model.api.PokemonList;
 import org.izv.pokemon.model.entity.Pokemon;
 import org.izv.pokemon.model.entity.PokemonType;
 import org.izv.pokemon.model.entity.Type;
@@ -23,21 +24,25 @@ public class PokemonRepository {
     private static final String INIT = "init";
 
     private PokemonDao dao;
-    LiveData<List<PokemonType>> allPokemon;
-    LiveData<List<Pokemon>> livePokemons;
-    LiveData<List<Type>> liveTypes;
-    LiveData<Pokemon> livePokemon;
-    LiveData<Type> liveType;
-    MutableLiveData<Long> liveInsertResult;
-    MutableLiveData<List<Long>> liveInsertResults;
-    SharedPreferences preferences;
+    private LiveData<List<PokemonType>> allPokemon;
+    private LiveData<List<Pokemon>> livePokemons;
+    private LiveData<List<Type>> liveTypes;
+    private LiveData<Pokemon> livePokemon;
+    private LiveData<Type> liveType;
+    private MutableLiveData<Long> liveInsertResult;
+    private MutableLiveData<List<Long>> liveInsertResults;
+    private MutableLiveData<String> liveGetKalosResult;
+    private SharedPreferences preferences;
+    private PokemonList pokemonList;
 
     public PokemonRepository(Context context) {
         PokemonDatabase db = PokemonDatabase.getDatabase(context);
+        pokemonList = new PokemonList();
         dao = db.getDao();
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         liveInsertResult = new MutableLiveData<>();
         liveInsertResults = new MutableLiveData<>();
+        liveGetKalosResult = new MutableLiveData<>();
         if(!getInit()) {
             typesPreload();
             setInit();
@@ -56,6 +61,10 @@ public class PokemonRepository {
 
     public MutableLiveData<Long> getInsertResult() {
         return liveInsertResult;
+    }
+
+    public MutableLiveData<String> getKalosResult() {
+        return liveGetKalosResult;
     }
 
     public MutableLiveData<List<Long>> getInsertResults() {
@@ -172,5 +181,14 @@ public class PokemonRepository {
 
     public boolean getInit() {
         return preferences.getBoolean(INIT, false);
+    }
+
+    public void getKalos() {
+        Runnable r = () -> {
+            String result = pokemonList.getKalos("https://www.pokemon.com/es/api/pokedex/kalos");
+            liveGetKalosResult.postValue(result);
+            Log.v("xyzyx", result);
+        };
+        new Thread(r).start();
     }
 }

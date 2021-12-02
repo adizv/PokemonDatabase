@@ -58,4 +58,12 @@ public class PokemonViewModel extends AndroidViewModel {
     public MutableLiveData<List<Long>> getInsertResults() {
         return repository.getInsertResults();
     }
+
+    public void getKalos() {
+        repository.getKalos();
+    }
+
+    public MutableLiveData<String> getKalosResult() {
+        return repository.getKalosResult();
+    }
 }

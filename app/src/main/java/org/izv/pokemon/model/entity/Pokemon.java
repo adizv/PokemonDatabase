@@ -33,4 +33,9 @@ public class Pokemon {
     @ColumnInfo(name = "url")
     public String url;
 
+    public boolean isValid() {
+        return !(name.isEmpty() || height <= 0  || weight <= 0 || url.isEmpty() || idtype <= 0);
+        //shortcut
+    }
+
 }
