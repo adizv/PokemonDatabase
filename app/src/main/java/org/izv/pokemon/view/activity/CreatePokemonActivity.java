@@ -23,7 +23,11 @@ import org.izv.pokemon.model.entity.Pokemon;
 import org.izv.pokemon.model.entity.Type;
 import org.izv.pokemon.viewmodel.PokemonViewModel;
 import org.izv.pokemon.viewmodel.TypeViewModel;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class CreatePokemonActivity extends AppCompatActivity {
@@ -104,6 +108,23 @@ public class CreatePokemonActivity extends AppCompatActivity {
         pvm.getKalos();
         pvm.getKalosResult().observe(this, s -> {
             //aqui me llega la lista de pokemons
+            try {
+                JSONArray array = new JSONArray(s);
+                for (int i = 0, size = array.length(); i < size; i++) {
+                    JSONObject objectInArray = array.getJSONObject(i);
+                    //String[] elementNames = JSONObject.getNames(objectInArray);
+                    /*System.out.printf("%d ELEMENTS IN CURRENT OBJECT:\n", elementNames.length);
+                    for (String elementName : elementNames)
+                    {
+                        String value = objectInArray.getString(elementName);
+                        System.out.printf("name=%s, value=%s\n", elementName, value);
+                    }
+                    System.out.println();*/
+                }
+                Log.v("xyzyx", "Pokemons: " + array.length());
+            } catch (JSONException e) {
+                Log.v("xyzyx", "Excepcion: " + e.getMessage());
+            }
         });
 
         /*pvm.getInsertResult().observe(this, aLong -> {
