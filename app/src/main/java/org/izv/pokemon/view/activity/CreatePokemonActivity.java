@@ -2,33 +2,25 @@ package org.izv.pokemon.view.activity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import org.izv.pokemon.R;
 import org.izv.pokemon.model.entity.Pokemon;
 import org.izv.pokemon.model.entity.Type;
 import org.izv.pokemon.viewmodel.PokemonViewModel;
 import org.izv.pokemon.viewmodel.TypeViewModel;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Iterator;
-import java.util.List;
 
 public class CreatePokemonActivity extends AppCompatActivity {
 
@@ -55,12 +47,22 @@ public class CreatePokemonActivity extends AppCompatActivity {
         etHeight = findViewById(R.id.etHeight);
         etUrl = findViewById(R.id.etUrl);
         ivImage = findViewById(R.id.ivImage);
+        etName.setOnFocusChangeListener((v, hasFocus) -> {
+            String url;
+            if(!hasFocus) {
+                if(!etName.getText().toString().isEmpty()) {
+                    url = pvm.getUrl(etName.getText().toString());
+                    Glide.with(this).load(url).into(ivImage);
+                    etUrl.setText(url);
+                }
+            }
+        });
         getViewModel();
         defineAddListener();
     }
 
     private void defineAddListener() {
-        Button btAdd = findViewById(R.id.btAdd);
+        Button btAdd = findViewById(R.id.btEdit);
         btAdd.setOnClickListener(v -> {
             Pokemon pokemon = getPokemon();
             if(pokemon.isValid()) {
@@ -108,23 +110,6 @@ public class CreatePokemonActivity extends AppCompatActivity {
         pvm.getKalos();
         pvm.getKalosResult().observe(this, s -> {
             //aqui me llega la lista de pokemons
-            try {
-                JSONArray array = new JSONArray(s);
-                for (int i = 0, size = array.length(); i < size; i++) {
-                    JSONObject objectInArray = array.getJSONObject(i);
-                    //String[] elementNames = JSONObject.getNames(objectInArray);
-                    /*System.out.printf("%d ELEMENTS IN CURRENT OBJECT:\n", elementNames.length);
-                    for (String elementName : elementNames)
-                    {
-                        String value = objectInArray.getString(elementName);
-                        System.out.printf("name=%s, value=%s\n", elementName, value);
-                    }
-                    System.out.println();*/
-                }
-                Log.v("xyzyx", "Pokemons: " + array.length());
-            } catch (JSONException e) {
-                Log.v("xyzyx", "Excepcion: " + e.getMessage());
-            }
         });
 
         /*pvm.getInsertResult().observe(this, aLong -> {

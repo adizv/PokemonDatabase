@@ -1,5 +1,8 @@
 package org.izv.pokemon.model.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -10,7 +13,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "pokemon",
         indices = {@Index(value = "name", unique = true)},
         foreignKeys = {@ForeignKey(entity = Type.class, parentColumns = "id", childColumns = "idtype", onDelete = ForeignKey.CASCADE)})
-public class Pokemon {
+public class Pokemon implements Parcelable {
 
     //id autonumérico
     @PrimaryKey(autoGenerate = true)
@@ -33,9 +36,47 @@ public class Pokemon {
     @ColumnInfo(name = "url")
     public String url;
 
+    public Pokemon() {
+    }
+
+    protected Pokemon(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        idtype = in.readLong();
+        weight = in.readInt();
+        height = in.readDouble();
+        url = in.readString();
+    }
+
+    public static final Creator<Pokemon> CREATOR = new Creator<Pokemon>() {
+        @Override
+        public Pokemon createFromParcel(Parcel in) {
+            return new Pokemon(in);
+        }
+
+        @Override
+        public Pokemon[] newArray(int size) {
+            return new Pokemon[size];
+        }
+    };
+
     public boolean isValid() {
         return !(name.isEmpty() || height <= 0  || weight <= 0 || url.isEmpty() || idtype <= 0);
         //shortcut
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeLong(idtype);
+        dest.writeInt(weight);
+        dest.writeDouble(height);
+        dest.writeString(url);
+    }
 }

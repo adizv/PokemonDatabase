@@ -66,4 +66,8 @@ public class PokemonViewModel extends AndroidViewModel {
     public MutableLiveData<String> getKalosResult() {
         return repository.getKalosResult();
     }
+
+    public String getUrl(String pokemonName) {
+        return repository.getUrl(pokemonName);
+    }
 }

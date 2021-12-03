@@ -1,6 +1,7 @@
 package org.izv.pokemon.view.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,11 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> {
     @Override
     public PokemonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pokemon, parent, false);
+        /*view.setOnClickListener(v -> {
+            Log.v("xyzyx", "onclick create ");
+            Pokemon p = (Pokemon) view.getTag();
+            Log.v("xyzyx", p.name);
+        });*/
         return new PokemonViewHolder(view);
     }
 
@@ -39,6 +45,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> {
     public void onBindViewHolder(@NonNull PokemonViewHolder holder, int position) {
         PokemonType pokemonType = pokemonList.get(position);
         Pokemon pokemon = pokemonType.pokemon;
+        holder.pokemon = pokemon;
         Type type = pokemonType.type;
         holder.tvUrl.setText(pokemon.url);
         holder.tvWeight.setText(pokemon.weight + " " + context.getString(R.string.weight_unit));

@@ -15,14 +15,20 @@ import org.izv.pokemon.model.entity.PokemonType;
 import org.izv.pokemon.model.entity.Type;
 import org.izv.pokemon.model.room.PokemonDao;
 import org.izv.pokemon.model.room.PokemonDatabase;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class PokemonRepository {
 
     private static final String INIT = "init";
 
+    private HashMap<String, String> pokemonMap;
     private PokemonDao dao;
     private LiveData<List<PokemonType>> allPokemon;
     private LiveData<List<Pokemon>> livePokemons;
@@ -38,6 +44,7 @@ public class PokemonRepository {
     public PokemonRepository(Context context) {
         PokemonDatabase db = PokemonDatabase.getDatabase(context);
         pokemonList = new PokemonList();
+        pokemonMap = new HashMap<>();
         dao = db.getDao();
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         liveInsertResult = new MutableLiveData<>();
@@ -186,9 +193,33 @@ public class PokemonRepository {
     public void getKalos() {
         Runnable r = () -> {
             String result = pokemonList.getKalos("https://www.pokemon.com/es/api/pokedex/kalos");
-            liveGetKalosResult.postValue(result);
+            populateHashMap(result);
+            liveGetKalosResult.postValue(result); // -> observer
             Log.v("xyzyx", result);
         };
         new Thread(r).start();
+    }
+
+    public String getUrl(String pokemonName) {
+        String url = pokemonMap.get(pokemonName.toLowerCase());
+        if(url == null) {
+            url = "https://www.latercera.com/resizer/CBmGvvFEACkiaL4Diatt7wyUqlM=/900x600/smart/arc-anglerfish-arc2-prod-copesa.s3.amazonaws.com/public/LUOOHUM2OVEEXG7ZTRSNI6XWLY.png";
+        }
+        return url;
+    }
+
+    private void populateHashMap(String string) {
+        String name, url;
+        try {
+            JSONArray jsonArray = new JSONArray(string);
+            JSONObject jsonObject;
+            for (int i = 0, size = jsonArray.length(); i < size; i++) {
+                jsonObject = jsonArray.getJSONObject(i);
+                name = jsonObject.getString("name").toLowerCase();
+                url = jsonObject.getString("ThumbnailImage");
+                pokemonMap.put(name, url);
+            }
+        } catch (JSONException e) {
+        }
     }
 }
